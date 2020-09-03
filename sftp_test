@@ -1,0 +1,68 @@
+import pysftp as sftp
+
+class SFTPClient:
+
+    def __init__(self,host: str,user: str,pwd: str):
+        self.host = host
+        self.user = user
+        self.pwd = pwd
+
+    def connect_with_user_pwd(self):
+        try:
+            cnopts = sftp.CnOpts()
+            cnopts.hostkeys = None
+
+            self.s = sftp.Connection(host = self.host, username = self.user, password = self.pwd, cnopts = cnopts)
+
+            print('Connection Established')
+        except:
+            print('Connection could not be established')
+
+    def set_remote_dir(self, path: str):
+        try:
+            self.s.cwd(path)
+            print('Remote Path Changed')
+        except:
+            print("Remote Path failed to change")
+
+    def set_local_dir(self, path: str):
+        self.local_path = path
+        if self.local_path is None:
+            return 'Local Path not set'
+        else:
+            print(self.local_path)
+            return 'Local Path set'
+
+    def list_files(self):
+        try:
+            self.data = self.s.listdir()
+            print(self.data)
+        except:
+            print('files cannot be listed')
+
+    def download_files(self):
+        try:
+            for i in self.data:
+                self.s.get(i,self.local_path + i)
+            print('All Files downloaded')
+        except:
+            print('files could not be downloaded')
+
+    def remove_files(self):
+        try:
+            for i in self.data:
+                self.s.remove(i)
+            print('all files removed')
+            self.s.close()
+            print('Connection Closed')
+        except:
+            print('error in deleting files')
+
+
+test = SFTPClient('40.115.66.2','azureuser','Azureuser123')
+test.connect_with_user_pwd()
+test.set_remote_dir('/home/azureuser/machine_stats/')
+test.set_local_dir('C:\\Users\\manda\\OneDrive\\Documents\\Data Disca\\server_machine_stats\\')
+test.list_files()
+test.download_files()
+test.remove_files()
