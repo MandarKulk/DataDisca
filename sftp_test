@@ -59,7 +59,7 @@ class SFTPClient:
             print('error in deleting files')
 
 
-test = SFTPClient('40.115.66.2','azureuser','Azureuser123')
+test = SFTPClient('13.70.155.134','azureuser','Azureuser@123')
 test.connect_with_user_pwd()
 test.set_remote_dir('/home/azureuser/machine_stats/')
 test.set_local_dir('C:\\Users\\manda\\OneDrive\\Documents\\Data Disca\\server_machine_stats\\')
